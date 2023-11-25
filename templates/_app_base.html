@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <title>{% block title %}User Tulpa{% endblock title %}</title>
+  <meta name="description" content="A framework for launching new Django projects quickly.">
+  <meta name="author" content="">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
+  {% block css %}
+  <!-- Bootstrap CSS -->
+ 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{% static 'css/app.bundle.css' %}">
+  {% endblock %}
+  <script>
+            if (localStorage.getItem('color-scheme')) {
+                let scheme = localStorage.getItem('color-scheme');
+
+                const LTCSS = document.querySelectorAll('link[class=css-lt]');
+                const DKCSS = document.querySelectorAll('link[class=css-dk]');
+
+                [...LTCSS].forEach((link) => {
+                    link.media = (scheme === 'light') ? 'all' : 'not all';
+                });
+
+                [...DKCSS].forEach((link) => {
+                    link.media = (scheme === 'dark') ? 'all' : 'not all';
+                });
+            }
+        </script>
+</head>
+
+<body>
+  
+  <div class="layout overflow-hidden">
+    {% include 'app/navbar.html' %}
+    {% include 'app/sidebar.html' %}
+
+    {% block content %}
+      <p>Default content...</p>
+    {% endblock content %}
+
+  </div><!--/layout-->
+{% include 'app/profile-modal.html' %}
+
+ 
+  {% block javascript %}
+
+
+  <!-- Project JS -->
+  <script src="{% static 'js/vendor.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
+  {% endblock javascript %}
+
+</body>
+
+</html>

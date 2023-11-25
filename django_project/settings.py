@@ -1,16 +1,28 @@
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+# Initialise environment variables
+load_dotenv()
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECRET_KEY
-SECRET_KEY = "django-insecure-0peo@#x9jur3!h$ryje!$879xww8y1y66jx!%*#ymhg&jkozs2"
+# False if not in os.environ because of casting above
+DEBUG = os.environ.get('DEBUG')
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True
+# Raises Django's ImproperlyConfigured
+# exception if SECRET_KEY not in os.environ
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+
+# Media
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = [
@@ -31,6 +43,7 @@ INSTALLED_APPS = [
     # Local
     "accounts",
     "pages",
+    "app",
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
@@ -65,6 +78,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "app.context_processors.persona_form",
             ],
         },
     },

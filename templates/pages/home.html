@@ -1,11 +1,38 @@
 {% extends '_base.html' %}
 {% load static %}
 
-{% block title %}Home page{% endblock title %}
+{% block title %}UserTulpa{% endblock title %}
 
 {% block content %}
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-  <img src="{% static 'images/logo.png' %}" class="img-fluid" alt="DjangoX logo"/>
-  <p class="lead">A Django starter project with batteries.</p>
-</div>
+<header class="masthead">
+            
+  <div class="row gx-5 align-items-center">
+      <div class="col-lg-6">
+          <!-- Mashead text and app badges-->
+          <div class="mb-5 mb-lg-0 text-center text-lg-start">
+              <h1 class="display-1 lh-1 mb-3">Bring your personas to life.</h1>
+              <p class="lead fw-normal text-muted mb-5">Chat to your personas, get idea feedback and more.</p>
+              <div class="d-flex flex-column flex-lg-row align-items-center">
+              </div>
+          </div>
+      </div>
+      <div class="col-lg-6">
+          <!-- Masthead device mockup feature-->
+          <div class="masthead-device-mockup">
+            
+              <div class="device-wrapper">
+                  <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
+                      <div class="screen bg-black">
+                          <!-- PUT CONTENTS HERE:-->
+                          <!-- * * This can be a video, image, or just about anything else.-->
+                          <!-- * * Set the max width of your media to 100% and the height to-->
+                          <!-- * * 100% like the demo example below.-->
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+     
+</header>
 {% endblock content %}
