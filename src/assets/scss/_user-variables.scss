@@ -1,0 +1,24 @@
+//
+// Use this to overwrite Bootstrap and theme variables
+//
+
+// Example:
+// $line-clamp: 1;
+
+// scss-docs-start gray-color-variables
+$white:    #ffffff !default;
+$gray-100: #f5f8fb !default;
+$gray-200: #f6f9fb !default;
+$gray-300: #ebf1f7 !default;
+$gray-400: #e2ecf3 !default;
+$gray-500: #adb5bd !default;
+$gray-600: #95aac9 !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #293951 !default;
+$black:    #000000 !default;
+// scss-docs-end gray-color-variables
+
+$body-color:                $gray-800 !default;
+
+$navigation-width:                  80px !default;

@@ -18,7 +18,7 @@
 
                             <div class="profile-body">
                                 <div class="avatar avatar-xl">
-                                    <img class="avatar-img" src="./assets/img/avatars/1.jpg" alt="#">
+                                    <img class="avatar-img" src="{% static 'assets/img/avatars/default-user.png' %}" alt="#">
                                 </div>
 
                                 <h4 class="mb-1">William Wright</h4>
@@ -138,7 +138,7 @@
                                     <img class="avatar-img" src="{% if persona.profile_picture %}
                                                     {{ persona.profile_picture.url }}
                                                 {% else %}
-                                                    {% static 'images/default-robot.png' %}
+                                                    {% static 'assets/img/avatars/default-robot.png' %}
                                                 {% endif %}" alt="#">
 
                                     

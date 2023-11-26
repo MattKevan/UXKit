@@ -24,7 +24,7 @@ def create_persona(request):
 			persona.user = request.user
 
 			# Format the prompt for DALL-E
-			prompt = f"A modern stock photo portrait photograph of {persona.name}, {persona.bio}, {persona.get_gender_display()}, age {persona.age}"
+			prompt = f"A modern stock photo portrait photograph of {persona.name}, {persona.bio}, {persona.gender}, age {persona.age}"
 			client = OpenAI()
 			# Make an API request to OpenAI (DALL-E)
 			# Assuming `client` is your configured OpenAI client
@@ -69,6 +69,14 @@ def delete_persona(request, persona_id):
 
 	return redirect('app_home')
 
+
+@login_required
+def persona_profile(request, persona_id):
+
+	persona = get_object_or_404(Persona, id=persona_id, user=request.user)
+	personas = Persona.objects.filter(user=request.user)
+
+	return render(request, 'app/persona_profile.html', {'personas': personas, 'persona': persona})
 
 @login_required
 def persona_detail(request, persona_id):

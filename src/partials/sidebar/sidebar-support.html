@@ -1,0 +1,113 @@
+<div class="d-flex flex-column h-100">
+    <div class="hide-scrollbar">
+        <div class="container py-8">
+
+            <!-- Title -->
+            <div class="mb-8">
+                <h2 class="fw-bold m-0">@@title</h2>
+            </div>
+
+            <!-- Search -->
+            <div class="mb-6">
+                @@include("../components/search.html")
+            </div>
+
+            <!-- Docs -->
+            <div class="card border-0">
+                <div class="card-body">
+
+                    <div class="row align-items-center gx-5">
+                        <div class="col-auto text-primary">
+                            @@include("../../assets/img/brand/brand.svg")
+                        </div>
+
+                        <div class="col">
+                            <h4 class="mb-1">Documentation</h4>
+                            <p>Setup and build tools</p>
+                        </div>
+
+                        <div class="col-auto">
+                            <a href="docs/index.html" class="btn btn-sm btn-icon btn-primary rounded-circle">
+                                @@include("../../assets/img/icons/chevron-right.svg")
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Docs -->
+
+            <!-- Account Pages -->
+            <div class="card-list mt-8">
+                <div class="d-flex align-items-center mb-4 px-6">
+                    <small class="text-muted me-auto">Pages</small>
+                </div>
+
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="row align-items-center gx-0">
+                            <div class="col">
+                                <h4 class="mb-1">Sign In</h4>
+                                <p>Sign in Page</p>
+                            </div>
+                            <div class="col-auto">
+                                <a href="signin.html" class="btn btn-sm btn-icon btn-primary rounded-circle">
+                                    @@include("../../assets/img/icons/chevron-right.svg")
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="row align-items-center gx-0">
+                            <div class="col">
+                                <h4 class="mb-1">Sign Up</h4>
+                                <p>Sign Up Page</p>
+                            </div>
+                            <div class="col-auto">
+                                <a href="signup.html" class="btn btn-sm btn-icon btn-primary rounded-circle">
+                                    @@include("../../assets/img/icons/chevron-right.svg")
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="row align-items-center gx-0">
+                            <div class="col">
+                                <h4 class="mb-1">Password Reset</h4>
+                                <p>Password Reset Page</p>
+                            </div>
+                            <div class="col-auto">
+                                <a href="password-reset.html" class="btn btn-sm btn-icon btn-primary rounded-circle">
+                                    @@include("../../assets/img/icons/chevron-right.svg")
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="row align-items-center gx-0">
+                            <div class="col">
+                                <h4 class="mb-1">Lock screen</h4>
+                                <p>Lock screen Page</p>
+                            </div>
+                            <div class="col-auto">
+                                <a href="lockscreen.html" class="btn btn-sm btn-icon btn-primary rounded-circle">
+                                    @@include("../../assets/img/icons/chevron-right.svg")
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Account Pages -->
+        </div>
+    </div>
+</div>

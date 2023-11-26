@@ -15,10 +15,11 @@
   <!-- Bootstrap CSS -->
  
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
-  <link rel="stylesheet" href="{% static 'css/app.bundle.css' %}">
+<link class="css-lt" rel="stylesheet" href="{% static 'assets/css/template.bundle.css' %}">
+<link class="css-dk" rel="stylesheet" href="{% static 'assets/css/template.dark.bundle.css' %}" media="(prefers-color-scheme: dark)">
   {% endblock %}
-  <script>
+          <!-- Theme mode -->
+        <script>
             if (localStorage.getItem('color-scheme')) {
                 let scheme = localStorage.getItem('color-scheme');
 
@@ -54,8 +55,8 @@
 
 
   <!-- Project JS -->
-  <script src="{% static 'js/vendor.js' %}"></script>
-<script src="{% static 'js/app.js' %}"></script>
+  <script src="{% static 'assets/js/vendor.js' %}"></script>
+<script src="{% static 'assets/js/template.js' %}"></script>
   {% endblock javascript %}
 
 </body>

@@ -54,21 +54,7 @@
                                                 </div>
 
                                                 <div class="col-auto">
-                                                    <div class="avatar-group">
-                                                        <a href="#" class="avatar avatar-sm" data-bs-toggle="modal" data-bs-target="#modal-user-profile">
-                                                            <img class="avatar-img" src="{% static 'images/default-user.png' %}" alt="#">
-                                                        </a>
-
-                                                        <a href="#" class="avatar avatar-sm" data-bs-toggle="modal" data-bs-target="#modal-profile">
-                                                            <img class="avatar-img" src="
-                                                            {% if persona.profile_picture %}
-                                                                {{ persona.profile_picture.url }}
-                                                            {% else %}
-                                                                {% static 'images/default-robot.png' %}
-                                                            {% endif %}" 
-                                                            alt="#">
-                                                        </a>
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -99,7 +85,7 @@
                                         <!-- Message out -->
                                         <div class="message message-out">
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal-profile" class="avatar avatar-responsive">
-                                                <img class="avatar-img" src="{% static 'images/default-user.png' %}" alt="">
+                                                <img class="avatar-img" src="{% static 'assets/img/avatars/default-user.png' %}" alt="">
                                             </a>
 
                                             <div class="message-inner">
@@ -124,7 +110,7 @@
                                                 {% if persona.profile_picture %}
                                                     {{ persona.profile_picture.url }}
                                                 {% else %}
-                                                    {% static 'images/default-robot.png' %}
+                                                    {% static 'assets/img/avatars/default-robot.png' %}
                                                 {% endif %}" alt="">
                                             </a>
 
@@ -268,7 +254,7 @@
                                         {% if persona.profile_picture %}
                                             {{ persona.profile_picture.url }}
                                         {% else %}
-                                            {% static 'images/default-robot.png' %}
+                                            {% static 'iassets/img/avatars/default-robot.png' %}
                                         {% endif %}
                                         " alt="#" class="avatar-img">
 
@@ -537,7 +523,7 @@
                                         <div class="col-auto">
                                             <div class="avatar-group">
                                                 <a href="#" class="avatar avatar-sm">
-                                                    <img class="avatar-img" src="{% static 'images/default-user.png' %}" alt="#">
+                                                    <img class="avatar-img" src="{% static 'assets/img/avatars/default-user.png' %}" alt="#">
                                                 </a>
 
                                                 <a href="#" class="avatar avatar-sm">
