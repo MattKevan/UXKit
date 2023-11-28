@@ -414,7 +414,7 @@ $position-values: (
 // Settings for the `<body>` element.
 
 $body-bg:                   $white !default;
-$body-color:                $gray-600 !default;
+$body-color:                $gray-900 !default;
 $body-text-align:           null !default;
 
 // Utilities maps
@@ -631,7 +631,7 @@ $headings-color:              $gray-900 !default;
 
 // scss-docs-start display-headings
 $display-font-sizes: (
-  1: 3rem,
+  1: 2rem,
   2: 1.5rem,
   3: 1.25rem,
   4: 1.2rem,
@@ -1659,7 +1659,6 @@ $extra-small-font-size:             $small-font-size * 0.76 !default;
 
 $avatar-sizes: (
   '': 44px,
-  xxl: 120px,
   xl: 82px,
   lg: 68px,
   sm: 34px,

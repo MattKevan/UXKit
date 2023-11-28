@@ -11,8 +11,12 @@
 // Template functions
 @import 'template/functions';
 
+// Custom core
+@import 'user';
+
 // Custom variables
 @import 'user-variables';
+
 
 // Template variables
 @import 'template/variables';
@@ -23,5 +27,4 @@
 // Template core
 @import 'template/template';
 
-// Custom core
-@import 'user';
+

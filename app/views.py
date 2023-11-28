@@ -16,7 +16,49 @@ def app_home(request):
 	personas = Persona.objects.filter(user=request.user)
 	return render(request, 'app/home.html', {'personas': personas})
 
+@login_required
+def edit_persona(request, persona_hash):
+	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)
+	personas = Persona.objects.filter(user=request.user)
+
+	if request.method == 'POST':
+		form = PersonaForm(request.POST, instance=persona)
+		if form.is_valid():
+			persona = form.save(commit=False)
+
+			# Format the prompt for DALL-E
+			prompt = f"A modern stock photo portrait photograph of {persona.name}, {persona.bio}, {persona.gender}, age {persona.age}"
+			client = OpenAI()
+			# Make an API request to OpenAI (DALL-E)
+			response = client.images.generate(
+				model="dall-e-3",
+				prompt=prompt,
+				size="1024x1024",
+				quality="standard",
+				n=1,
+			)
+			image_url = response.data[0].url
+
+			# Download the image from the URL
+			response = requests.get(image_url)
+			if response.status_code == 200:
+				# Replace the existing image
+				persona.profile_picture.save(f'{persona.name}_profile.png', ContentFile(response.content), save=True)
+
+			persona.save()
+
+			return redirect('persona_detail', unique_hash=persona.unique_hash)
+		else:
+			# If the form is not valid, re-render the page with form errors
+			return render(request, 'app/edit_persona.html', {'form': form, 'personas': personas})
+
+	# For a GET request, render the form with persona instance
+	form = PersonaForm(instance=persona)
+	return render(request, 'app/edit_persona.html', {'form': form, 'personas': personas})
+
+@login_required
 def create_persona(request):
+	personas = Persona.objects.filter(user=request.user)
 	if request.method == 'POST':
 		form = PersonaForm(request.POST)
 		if form.is_valid():
@@ -45,16 +87,20 @@ def create_persona(request):
 
 			persona.save()
 
-			# Redirect to the newly created persona's detail page
-			return redirect('persona_detail', persona_id=persona.id)
+			return redirect('persona_detail', unique_hash=persona.unique_hash)  # Adjust this URL as needed
+		else:
+			# If the form is not valid, re-render the page with form errors
+			return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
+
 
 	# Fallback for a GET request or invalid form
-	return redirect('app_home')
+	form = PersonaForm()
+	return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
 
 
 @login_required
-def delete_persona(request, persona_id):
-	persona = get_object_or_404(Persona, id=persona_id, user=request.user)
+def delete_persona(request, persona_hash):
+	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)
 
 	if request.method == 'POST':
 		persona.delete()
@@ -62,7 +108,7 @@ def delete_persona(request, persona_id):
 		previous_page = request.META.get('HTTP_REFERER')
 
 		# Check if the previous page was the detail page of the deleted persona
-		if previous_page and f'/persona/{persona_id}/' not in previous_page:
+		if previous_page and f'/persona/{persona_hash}/' not in previous_page:
 			return HttpResponseRedirect(previous_page)
 		else:
 			return redirect('app_home')
@@ -71,17 +117,15 @@ def delete_persona(request, persona_id):
 
 
 @login_required
-def persona_profile(request, persona_id):
-
-	persona = get_object_or_404(Persona, id=persona_id, user=request.user)
+def persona_profile(request, persona_hash):
+	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)	
 	personas = Persona.objects.filter(user=request.user)
-
 	return render(request, 'app/persona_profile.html', {'personas': personas, 'persona': persona})
 
 @login_required
-def persona_detail(request, persona_id):
+def persona_detail(request, persona_hash):
 
-	persona = get_object_or_404(Persona, id=persona_id, user=request.user)
+	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)
 	personas = Persona.objects.filter(user=request.user)
 
 	# Check if the current user is the owner of the persona

@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+import uuid
 
 class Persona(models.Model):
 	# Gender choices
@@ -23,7 +24,7 @@ class Persona(models.Model):
 	needs = models.CharField(max_length=250, null=True)
 	frustrations = models.CharField(max_length=250, null=True)
 	goals = models.CharField(max_length=250, null=True)
-
+	unique_hash = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 	profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
 
 	def __str__(self):

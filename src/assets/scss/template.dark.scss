@@ -11,6 +11,9 @@
 // Template functions
 @import 'template/functions';
 
+// Custom core
+@import 'user';
+
 // Custom variables
 @import 'user-variables.dark';
 
@@ -20,8 +23,4 @@
 // Bootstrap core
 @import '../../../node_modules/bootstrap/scss/bootstrap';
 
-// Template core
-@import 'template/template';
 
-// Custom core
-@import 'user';

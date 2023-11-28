@@ -1,0 +1,20 @@
+{% extends '_app_base.html' %}
+{% block title %}Edit persona{% endblock title %}
+
+{% block content %}
+{% include 'app/edit-header.html' %}
+
+<div class="chat-body hide-scrollbar flex-1 h-100">
+        <div class="chat-body-inner h-100">
+            <div class="py-6 py-lg-12">
+    {% load crispy_forms_tags %}
+
+    <form method="post">
+        {% csrf_token %}
+         {{ form|crispy }}
+        <button class="btn btn-primary" type="submit">Save changes</button>
+    </form>
+</div>
+</div>
+</div>
+{% endblock %}
