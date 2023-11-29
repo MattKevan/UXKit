@@ -16,6 +16,30 @@ def app_home(request):
 	personas = Persona.objects.filter(user=request.user)
 	return render(request, 'app/home.html', {'personas': personas})
 
+
+@login_required
+def create_persona(request):
+    personas = Persona.objects.filter(user=request.user)
+    if request.method == 'POST':
+        form = PersonaForm(request.POST)
+        if form.is_valid():
+            persona = form.save(commit=False)
+            persona.user = request.user
+
+            # ... rest of your code for DALL-E and saving the image ...
+
+            persona.save()
+
+            return redirect('persona_detail', unique_hash=persona.unique_hash)
+        else:
+            # If the form is not valid, re-render the page with form errors
+            return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
+
+    # For a GET request, render an empty form
+    form = PersonaForm()
+    return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
+
+    
 @login_required
 def edit_persona(request, persona_hash):
 	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)
@@ -54,48 +78,7 @@ def edit_persona(request, persona_hash):
 
 	# For a GET request, render the form with persona instance
 	form = PersonaForm(instance=persona)
-	return render(request, 'app/edit_persona.html', {'form': form, 'personas': personas})
-
-@login_required
-def create_persona(request):
-	personas = Persona.objects.filter(user=request.user)
-	if request.method == 'POST':
-		form = PersonaForm(request.POST)
-		if form.is_valid():
-			persona = form.save(commit=False)
-			persona.user = request.user
-
-			# Format the prompt for DALL-E
-			prompt = f"A modern stock photo portrait photograph of {persona.name}, {persona.bio}, {persona.gender}, age {persona.age}"
-			client = OpenAI()
-			# Make an API request to OpenAI (DALL-E)
-			# Assuming `client` is your configured OpenAI client
-			response = client.images.generate(
-				model="dall-e-3",
-				prompt=prompt,
-				size="1024x1024",
-				quality="standard",
-				n=1,
-			)
-			image_url = response.data[0].url
-
-			# Download the image from the URL
-			response = requests.get(image_url)
-			if response.status_code == 200:
-				# Assuming the image is a PNG
-				persona.profile_picture.save(f'{persona.name}_profile.png', ContentFile(response.content), save=True)
-
-			persona.save()
-
-			return redirect('persona_detail', unique_hash=persona.unique_hash)  # Adjust this URL as needed
-		else:
-			# If the form is not valid, re-render the page with form errors
-			return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
-
-
-	# Fallback for a GET request or invalid form
-	form = PersonaForm()
-	return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
+	return render(request, 'app/edit_persona.html', {'form': form, 'personas': personas, 'persona':persona})
 
 
 @login_required

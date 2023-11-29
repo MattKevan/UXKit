@@ -1,71 +1,145 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% include '_head.html' %}
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-  <title>Eidola</title>
-  <meta name="description" content="A framework for launching new Django projects quickly.">
-  <meta name="author" content="">
-  <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-
-  {% block css %}
-  <!-- Bootstrap CSS -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;700;800&family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
-	<link class="css-lt" rel="stylesheet" href="{% static 'assets/css/template.css' %}">
-	<link class="css-dk" rel="stylesheet" href="{% static 'assets/css/template.dark.css' %}" media="(prefers-color-scheme: dark)">
-  {% endblock %}
-		  <!-- Theme mode -->
-  <script>
-	  if (localStorage.getItem('color-scheme')) {
-		  let scheme = localStorage.getItem('color-scheme');
-
-		  const LTCSS = document.querySelectorAll('link[class=css-lt]');
-		  const DKCSS = document.querySelectorAll('link[class=css-dk]');
-
-		  [...LTCSS].forEach((link) => {
-			  link.media = (scheme === 'light') ? 'all' : 'not all';
-		  });
-
-		  [...DKCSS].forEach((link) => {
-			  link.media = (scheme === 'dark') ? 'all' : 'not all';
-		  });
-	  }
-  </script>
-</head>
 
 <body>
-  
-  <div class="layout overflow-hidden">
-	{% include 'app/navbar.html' %}
-	{% include 'app/sidebar.html' %}
+  <!-- ========== HEADER ========== -->
+{% block app_header %}
 
-	<main class="main is-visible" data-dropzone-area="">
-	<div class="container h-100">
-		<div class="d-flex flex-column h-100 position-relative">
+{% endblock %}
+  <!-- ========== END HEADER ========== -->
 
-			
-			{% block content %}
+  <!-- ========== MAIN CONTENT ========== -->
+  <!-- Sidebar Toggle -->
+  {% block mobile_header %}
+  <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex items-center py-4">
+      <!-- Navigation Toggle -->
+      <button type="button" class="text-gray-500 hover:text-gray-600" data-hs-overlay="#application-sidebar" aria-controls="application-sidebar" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle Navigation</span>
+        <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+      </button>
+      <!-- End Navigation Toggle -->
+
+      <!-- Breadcrumb -->
+      <div class="flex-shrink-0 group block">
+                
+      </div>
+      <div class="ms-3 w-full flex items-center justify-end ms-auto">
+
+ 
+
+            
+        <div class="flex flex-row items-center justify-end gap-2">
+           
+          </div>
+
+      </div>
+      <!-- End Breadcrumb -->
+    </div>
+  </div>
+  <!-- End Sidebar Toggle -->
+<div class="flex items-center">
+                    
+</div>
+{% endblock %}
+  <div id="application-sidebar" class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full duration-300 transform hidden fixed top-0 start-0 bottom-0 z-[60] w-64 bg-white border-e border-gray-200 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-slate-700 dark:[&::-webkit-scrollbar-thumb]:bg-slate-500 dark:bg-slate-900 dark:border-gray-700">
+  <nav class="hs-accordion-group w-full h-full flex flex-col" data-hs-accordion-always-open>
+    <div class="flex items-center justify-between pt-4 pe-4 ps-4">
+      <!-- Logo -->
+ 
+      <a class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/" aria-label="Brand">Eidola</a>
+
+      <!-- End Logo -->
+    </div>
+
+    <div class="h-full">
+      <!-- List -->
+      <ul class="space-y-1.5 p-4">
+         <li><h5 class="mb-3 text-sm font-semibold text-slate-900 dark:text-slate-200">Personas</h5></li>
+
+        {% if personas %}
+          {% for persona in personas %}
+        <li><a class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{% url 'persona_detail' persona.unique_hash %}">
+                  <img class="inline-block h-8 w-8 rounded-full" src="
+        {% if persona.profile_picture %}
+            {{ persona.profile_picture.url }}
+        {% else %}
+            {% static 'assets/img/avatars/default-robot.png' %}
+        {% endif %}" alt="{{ persona.name }}">
+          {{ persona.name }}
+        </a></li>
+                                   {% endfor %}
+
+                            {% else %}
+                                <p>No personas created yet.</p>
+                            {% endif %}
+                                    <li>
+          <a class="flex items-center gap-x-3 py-2 px-3 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{% url 'create_persona' %}">
+            <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            New persona
+          </a>
+        </li>
+      </ul>
+      <!-- End List -->
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-auto">
+
+
+      <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+       <div class="hs-dropdown relative inline-flex">
+  <button id="hs-dropdown-custom-trigger" type="button" class="hs-dropdown-toggle py-1 ps-1 pe-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-full  bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+    <img class="w-8 h-auto rounded-full" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" alt="Maria">
+    <span class="text-gray-600 font-medium truncate max-w-[7.5rem] dark:text-gray-400">{{ user.username }}</span>
+    <svg class="hs-dropdown-open:rotate-180 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+
+  <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[15rem] bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-gray-800 dark:border dark:border-gray-700" aria-labelledby="hs-dropdown-custom-trigger">
+    
+    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700" href="{% url 'account_change_password' %}">
+      Change password
+    </a>
+    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700" href="{% url 'account_logout' %}">
+      Log out
+    </a>
+  </div>
+</div>
+      </div>
+    </div>
+    <!-- End Footer -->
+  </nav>
+</div>
+<!-- End Sidebar -->
+
+  <!-- Content -->
+    			{% block content %}
 			  <p>Default content...</p>
-			{% endblock content %}
+			{% endblock content %} 
+  <!-- End Content -->
+  <!-- ========== END MAIN CONTENT ========== -->
 
-	        </div>
-	    </div>
-	</main>
 
-  </div><!--/layout-->
-  {% include 'app/profile-modal.html' %}
+
+
+
 
   {% block javascript %}
 	<!-- Project JS -->
-	<script src="{% static 'assets/js/vendor.js' %}"></script>
-	<script src="{% static 'assets/js/template.js' %}"></script>
+	<script src="{% static 'assets/js/app.js' %}"></script>
+	<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var links = document.querySelectorAll('#application-sidebar ul li a');
+            var currentUrl = window.location.href;
+
+            links.forEach(function (link) {
+                if (link.href === currentUrl) {
+                    link.classList.add('bg-gray-100');
+                }
+            });
+        });
+    </script>
   {% endblock javascript %}
 
 </body>

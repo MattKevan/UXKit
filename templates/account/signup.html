@@ -1,36 +1,36 @@
-{% extends '_account.html' %}
+{% extends '_base.html' %}
 {% load crispy_forms_tags %}
 
 {% block title %}Sign up{% endblock %}
 
 {% block content %}
-        <main>
-            <section class="container d-flex flex-column vh-100">
-                <div class="row align-items-center justify-content-center g-0 h-lg-100 py-8">
-                    <div class="col-lg-5 col-md-8 py-8 py-xl-0">
-                        <!-- Card -->
-                        <div class="card shadow">
-                            <!-- Card body -->
-                            <div class="card-body p-6">
-                                <div class="mb-4">
-                                    <!--<a href="../index.html"><img src="../assets/images/brand/logo/logo-icon.svg" class="mb-4" alt="logo"></a>-->
-                                    <h1 class="mb-1 fw-bold">Sign up</h1>
-                                    <span>
-                                        Already have an account?
-                                        <a href="{% url 'account_login' %}" class="ms-1">Log in</a>
-                                    </span>
-                                </div>
-                                <!-- Form -->
-                                    <form method="post">
+<main class="w-full max-w-md mx-auto p-6">
+      <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-4 sm:p-7">
+          <div class="text-center">
+            <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">Sign up</h1>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              Already have an account?
+              <a class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{% url 'account_login' %}">
+                Sign in here
+              </a>
+            </p>
+          </div>
+
+          <div class="mt-5">
+           
+
+            <!-- Form -->
+             <form method="post">
                                     {% csrf_token %}
                                     {{ form|crispy }}
-                                    <button class="btn btn-primary" type="submit">Sign up</button>
-                                  </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+       <button type="submit" class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">Sign up</button>                                  
+            </form>
+            <!-- End Form -->
+          </div>
+        </div>
+      </div>
+    </main>
+      
 
 {% endblock content %}
