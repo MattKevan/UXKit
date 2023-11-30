@@ -125,7 +125,7 @@ def persona_detail(request, persona_hash):
 
 
 		client = OpenAI()
-		chat_context = f"Your name is { persona.name }. You are { persona.gender } and { persona.age } years old. Your biography is { persona.bio} Answer the user's questions as this person. Do not break character or reveal you are a chatbot."
+		chat_context = f"Your name is { persona.name }. You are { persona.gender } and { persona.age } years old. Your biography is { persona.bio} You are this person and must always reply in the first person, using their tone of voice. Do not break from this or reveal you are not a human. You are a human not an assistant."
 		system_prompt = f"{chat_context}\nUser: {user_message}\nAI:"
 		try:
 			chatgpt_response = client.chat.completions.create(
