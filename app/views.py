@@ -8,38 +8,91 @@ import requests
 from django.urls import reverse
 from openai import OpenAI
 
-from .models import Persona, ChatMessage
-from .forms import PersonaForm
+from .models import Persona, ChatMessage, Project
+from .forms import PersonaForm, CreateProject
+
+# App home
 
 @login_required
 def app_home(request):
 	personas = Persona.objects.filter(user=request.user)
 	return render(request, 'app/home.html', {'personas': personas})
 
+# Projects
+
+@login_required
+def projects(request):
+	projects = Project.objects.all()
+	return render(request, 'app/projects/projects.html', {'projects': projects})
+
+@login_required
+def create_project(request):
+	if request.method == 'POST':
+		form = CreateProject(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('projects')  # Redirect to the projects list view
+	else:
+		form = CreateProject()
+	
+	return render(request, 'app/projects/create_project.html', {'form': form})
+
+@login_required
+def delete_project(request, project_id):
+    if request.method == 'POST':
+        project = get_object_or_404(Project, pk=project_id)
+        project.delete()
+        return redirect('projects')  # Redirect to the projects list view
+    else:
+        return redirect('projects')
+
+@login_required
+def project_detail(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    return render(request, 'app/projects/project_detail.html', {'project': project})
+	
+# Personas
 
 @login_required
 def create_persona(request):
-    personas = Persona.objects.filter(user=request.user)
-    if request.method == 'POST':
-        form = PersonaForm(request.POST)
-        if form.is_valid():
-            persona = form.save(commit=False)
-            persona.user = request.user
+	personas = Persona.objects.filter(user=request.user)
+	if request.method == 'POST':
+		form = PersonaForm(request.POST)
+		if form.is_valid():
+			persona = form.save(commit=False)
+			persona.user = request.user
 
-            # ... rest of your code for DALL-E and saving the image ...
+			# Format the prompt for DALL-E
+			prompt = f"A modern stock photo portrait photograph of {persona.name}, {persona.bio}, {persona.gender}, age {persona.age}"
+			client = OpenAI()
+			# Make an API request to OpenAI (DALL-E)
+			response = client.images.generate(
+				model="dall-e-3",
+				prompt=prompt,
+				size="1024x1024",
+				quality="standard",
+				n=1,
+			)
+			image_url = response.data[0].url
 
-            persona.save()
+			# Download the image from the URL
+			response = requests.get(image_url)
+			if response.status_code == 200:
+				# Replace the existing image
+				persona.profile_picture.save(f'{persona.name}_profile.png', ContentFile(response.content), save=True)
 
-            return redirect('persona_detail', unique_hash=persona.unique_hash)
-        else:
-            # If the form is not valid, re-render the page with form errors
-            return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
+			persona.save()
+			
+			return redirect('persona_detail', persona_hash=persona.unique_hash)
+		else:
+			# If the form is not valid, re-render the page with form errors
+			return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
 
-    # For a GET request, render an empty form
-    form = PersonaForm()
-    return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
+	# For a GET request, render an empty form
+	form = PersonaForm()
+	return render(request, 'app/create_persona.html', {'form': form, 'personas': personas})
 
-    
+	
 @login_required
 def edit_persona(request, persona_hash):
 	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)
@@ -71,7 +124,7 @@ def edit_persona(request, persona_hash):
 
 			persona.save()
 
-			return redirect('persona_detail', unique_hash=persona.unique_hash)
+			return redirect('persona_detail', persona_hash=persona.unique_hash)
 		else:
 			# If the form is not valid, re-render the page with form errors
 			return render(request, 'app/edit_persona.html', {'form': form, 'personas': personas})

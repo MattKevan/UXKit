@@ -2,6 +2,16 @@ from django.db import models
 from django.conf import settings
 import uuid
 
+class Project(models.Model):
+	# Project fields
+	name = models.CharField(max_length=100)
+	description = models.CharField(max_length=400)
+	# unique_hash = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+	def __str__(self):
+		return self.name
+
+
 class Persona(models.Model):
 	# Gender choices
 	MAN = 'Male'

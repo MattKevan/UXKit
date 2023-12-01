@@ -1,5 +1,5 @@
 from django import forms
-from .models import Persona
+from .models import Persona, Project
 
 class PersonaForm(forms.ModelForm):
     class Meta:
@@ -12,3 +12,8 @@ class PersonaForm(forms.ModelForm):
             'goals': forms.Textarea(attrs={'rows': 3}),
             'gender': forms.Select(choices=Persona.GENDER_CHOICES),
         }
+
+class CreateProject(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ['name', 'description']
