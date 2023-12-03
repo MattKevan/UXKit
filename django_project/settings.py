@@ -44,14 +44,12 @@ INSTALLED_APPS = [
     'tailwind',
     'django_browser_reload',
     "theme",
-    "corsheaders",
     # Local
     "accounts",
     "pages",
     "app",
-
-
 ]
+
 TAILWIND_APP_NAME = 'theme'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
@@ -67,8 +65,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",  # django-allauth
     "django_browser_reload.middleware.BrowserReloadMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf

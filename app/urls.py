@@ -4,20 +4,25 @@ from . import views
 from django.conf import settings
 
 urlpatterns = [
+    # Dashboard
     path('', views.app_home, name='app_home'),
+    
     # Projects
-
     path('projects/', views.projects, name='projects'),
-    path('projects/create/', views.create_project, name='create_project'),
-    path('projects/delete/<int:project_id>/', views.delete_project, name='delete_project'),
-    path('projects/<int:project_id>/', views.project_detail, name='project_detail'),
+    path('projects/create/', views.project_create, name='project_create'),
+    path('<uuid:project_hash>/', views.project_read, name='project_read'),
+    path('<uuid:project_hash>/delete/', views.project_delete, name='project_delete'),
 
-    # Persona 
-
+    # Lean UX canvases
+    path('<uuid:project_hash>/ux-canvas/create/', views.lean_ux_canvas_create, name='lean_ux_canvas_create'),
+    path('ux-canvas/<uuid:lean_ux_canvas_hash>/', views.lean_ux_canvas_read, name='lean_ux_canvas_read'),
+    path('ux-canvas/<uuid:lean_ux_canvas_hash>/delete/', views.lean_ux_canvas_delete, name='lean_ux_canvas_delete'),
+    
+    # Personas 
     path('persona/create/', views.create_persona, name='create_persona'),
-    path('<uuid:persona_hash>/delete/', views.delete_persona, name='delete_persona'),
-    path('<uuid:persona_hash>/', views.persona_detail, name='persona_detail'),
-    path('<uuid:persona_hash>/view/', views.persona_profile, name='persona_profile'),
-    path('<uuid:persona_hash>/edit/', views.edit_persona, name='edit_persona'),
-
+    path('persona/<uuid:persona_hash>/', views.persona_detail, name='persona_detail'),
+    path('persona/<uuid:persona_hash>/profile/', views.persona_profile, name='persona_profile'),
+    path('persona/<uuid:persona_hash>/edit/', views.edit_persona, name='edit_persona'),
+    path('persona/uuid:persona_hash>/delete/', views.delete_persona, name='delete_persona'),
+    
 ]

@@ -8,8 +8,22 @@
     </div>
 
     <p>{{ project.description }}</p>
+    <a href="{% url 'lean_ux_canvas_create' project_hash=project.unique_hash %}">Create Lean UX Canvas</a>
+
+    <h3>Lean UX Canvases</h3>
+    <ul>
+        {% for canvas in canvases %}
+            <li>
+                <a href="{% url 'lean_ux_canvas_read' project_hash=project.unique_hash lean_ux_canvas_hash=canvas.unique_hash %}">
+                    {{ canvas.name }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No canvases found for this project.</li>
+        {% endfor %}
+    </ul>
     <!-- Add more fields as needed -->
-           <form action="{% url 'delete_project' project.id %}" method="post" class="py-6 ">
+           <form action="{% url 'project_delete' project.unique_hash %}" method="post" class="py-6 ">
         {% csrf_token %}
         <input type="submit" value="Delete project" class="inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 hover:bg-gray-50" onclick="return confirm('Are you sure you want to delete this persona?');">
     </form>
