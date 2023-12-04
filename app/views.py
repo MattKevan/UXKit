@@ -51,7 +51,7 @@ def project_create(request):
 def project_read(request, project_hash):
 	project = get_object_or_404(Project, unique_hash=project_hash, user=request.user)
 	canvases = LeanUXCanvas.objects.filter(user=request.user, project=project)
-	return render(request, 'app/projects/project_detail.html', {'project': project})
+	return render(request, 'app/projects/project_detail.html', {'project': project, 'canvases':canvases})
 
 # Delete project
 @login_required
