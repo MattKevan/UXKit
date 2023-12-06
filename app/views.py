@@ -15,8 +15,9 @@ from .forms import PersonaForm, ProjectForm, LeanUXCanvasForm
 
 @login_required
 def app_home(request):
+	projects = Project.objects.filter(user=request.user)
 	personas = Persona.objects.filter(user=request.user)
-	return render(request, 'app/home.html', {'personas': personas})
+	return render(request, 'app/home.html', {'personas': personas, 'projects':projects})
 
 # Projects
 
@@ -24,12 +25,16 @@ def app_home(request):
 @login_required
 def projects(request):
 	projects = Project.objects.filter(user=request.user)
-	return render(request, 'app/projects/projects.html', {'projects': projects})
+	personas = Persona.objects.filter(user=request.user)
+
+	return render(request, 'app/projects/projects.html', {'personas': personas, 'projects': projects})
 
 # Create project
 
 @login_required
 def project_create(request):
+	personas = Persona.objects.filter(user=request.user)
+
 	if request.method == 'POST':
 		form = ProjectForm(request.POST)
 		
@@ -41,17 +46,20 @@ def project_create(request):
 
 	else:
 		form = ProjectForm()
-		return render(request, 'app/projects/create_project.html', {'form': form})
+		return render(request, 'app/projects/create_project.html', {'form': form,'personas': personas, })
 	
-	return render(request, 'app/projects/create_project.html', {'form': form})
+	return render(request, 'app/projects/create_project.html', {'form': form,'personas': personas, })
 
 # View individial project
 
 @login_required
 def project_read(request, project_hash):
+	projects = Project.objects.filter(user=request.user)
+	personas = Persona.objects.filter(user=request.user)
 	project = get_object_or_404(Project, unique_hash=project_hash, user=request.user)
 	canvases = LeanUXCanvas.objects.filter(user=request.user, project=project)
-	return render(request, 'app/projects/project_detail.html', {'project': project, 'canvases':canvases})
+	return render(request, 'app/projects/project_detail.html', {'personas': personas, 'projects': projects, 'project': project, 'canvases':canvases})
+
 
 # Delete project
 @login_required
@@ -171,23 +179,31 @@ def lean_ux_canvas_create(request, project_hash):
 
 @login_required
 def lean_ux_canvas_read(request, lean_ux_canvas_hash):
-    lean_ux_canvas = get_object_or_404(LeanUXCanvas, unique_hash=lean_ux_canvas_hash, user=request.user)
+	projects = Project.objects.filter(user=request.user)
+	personas = Persona.objects.filter(user=request.user)
+	lean_ux_canvas = get_object_or_404(LeanUXCanvas, unique_hash=lean_ux_canvas_hash, user=request.user)
 
-    # Deserialize JSON fields
-    lean_ux_canvas.secondary_outcomes = json.loads(lean_ux_canvas.secondary_outcomes)
-    lean_ux_canvas.secondary_users = json.loads(lean_ux_canvas.secondary_users)
-    lean_ux_canvas.user_outcomes = json.loads(lean_ux_canvas.user_outcomes)
-    lean_ux_canvas.user_problems = json.loads(lean_ux_canvas.user_problems)
-    lean_ux_canvas.solution_ideas = json.loads(lean_ux_canvas.solution_ideas)
-    lean_ux_canvas.hypotheses = json.loads(lean_ux_canvas.hypotheses)
-    lean_ux_canvas.assumptions = json.loads(lean_ux_canvas.assumptions)
-    lean_ux_canvas.experiment_success_metrics = json.loads(lean_ux_canvas.experiment_success_metrics)
-    lean_ux_canvas.mvp_actions = json.loads(lean_ux_canvas.mvp_actions)
-    lean_ux_canvas.learning_metrics_tracking = json.loads(lean_ux_canvas.learning_metrics_tracking)
+	# Deserialize JSON fields
+	lean_ux_canvas.secondary_outcomes = json.loads(lean_ux_canvas.secondary_outcomes)
+	lean_ux_canvas.secondary_users = json.loads(lean_ux_canvas.secondary_users)
+	lean_ux_canvas.user_outcomes = json.loads(lean_ux_canvas.user_outcomes)
+	lean_ux_canvas.user_problems = json.loads(lean_ux_canvas.user_problems)
+	lean_ux_canvas.solution_ideas = json.loads(lean_ux_canvas.solution_ideas)
+	lean_ux_canvas.hypotheses = json.loads(lean_ux_canvas.hypotheses)
+	lean_ux_canvas.assumptions = json.loads(lean_ux_canvas.assumptions)
+	lean_ux_canvas.experiment_success_metrics = json.loads(lean_ux_canvas.experiment_success_metrics)
+	lean_ux_canvas.mvp_actions = json.loads(lean_ux_canvas.mvp_actions)
+	lean_ux_canvas.learning_metrics_tracking = json.loads(lean_ux_canvas.learning_metrics_tracking)
 
-    context = {'lean_ux_canvas': lean_ux_canvas}
+	context = {'personas':personas, 'projects':projects, 'lean_ux_canvas': lean_ux_canvas}
 
-    return render(request, 'app/lean_ux_canvas/read.html', context)
+	# Check if the request is from HTMX
+	if request.headers.get('HX-Request', 'false') == 'true':
+		# Return a partial template for HTMX requests
+		return render(request, 'app/lean_ux_canvas/partials/read.html', context)
+
+
+	return render(request, 'app/lean_ux_canvas/read.html', context)
 
 # Lean ux canvas delete
 
@@ -317,7 +333,7 @@ def persona_profile(request, persona_hash):
 
 @login_required
 def persona_detail(request, persona_hash):
-
+	projects = Project.objects.filter(user=request.user)
 	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)
 	personas = Persona.objects.filter(user=request.user)
 
@@ -358,10 +374,17 @@ def persona_detail(request, persona_hash):
 			)
 			record.save()
 			
-			return render(request, 'app/persona_detail.html', {'personas': personas, 'persona': persona, 'user_message':user_message, 'chatgpt_response':chatgpt_response, 'chat_messages': chat_messages})
+			return render(request, 'app/persona_detail.html', {'projects':projects, 'personas': personas, 'persona': persona, 'user_message':user_message, 'chatgpt_response':chatgpt_response, 'chat_messages': chat_messages})
 
 		except Exception as e:
-			 return render(request, 'app/persona_detail.html', {'personas': personas, 'persona': persona, 'user_message':e, 'chatgpt_response':chatgpt_response, 'chat_messages': chat_messages})
+			 return render(request, 'app/persona_detail.html', {'projects':projects, 'personas': personas, 'persona': persona, 'user_message':e, 'chatgpt_response':chatgpt_response, 'chat_messages': chat_messages})
 	
+	context = ({'projects':projects, 'personas': personas, 'persona': persona, 'chat_messages': chat_messages})
 
-	return render(request, 'app/persona_detail.html', {'personas': personas, 'persona': persona, 'chat_messages': chat_messages})
+
+	# Check if the request is from HTMX
+	if request.headers.get('HX-Request', 'false') == 'true':
+		# Return a partial template for HTMX requests
+		return render(request, 'app/personas/chat_partial.html', context)
+
+	return render(request, 'app/persona_detail.html', context)
