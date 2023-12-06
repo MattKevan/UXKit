@@ -24,6 +24,6 @@ urlpatterns = [
     path('persona/<uuid:persona_hash>/chat/', views.send_message, name='send_message'),
     path('persona/<uuid:persona_hash>/profile/', views.persona_profile, name='persona_profile'),
     path('persona/<uuid:persona_hash>/edit/', views.edit_persona, name='edit_persona'),
-    path('persona/uuid:persona_hash>/delete/', views.delete_persona, name='delete_persona'),
+    path('persona/<uuid:persona_hash>/delete/', views.delete_persona, name='delete_persona'),
     
 ]

@@ -171,9 +171,11 @@
 
         // Append AI Loading Bubble
         var aiLoadingHtml = `
-		<li id="ai-response" class="max-w-2xl ms-auto flex justify-end gap-x-2 sm:gap-x-4 space-y-5">
-			<div class="inline-block bg-blue-600 rounded-lg p-4 shadow-sm">
-				<div class="loader">Loading...</div>
+		<li id="ai-response" class="max-w-2xl ms-auto flex justify-end gap-x-2 sm:gap-x-4 space-y-5 mt-5">
+			<div class="inline-block bg-blue-600 rounded-lg p-4 shadow-sm is-typing">
+				<div class="jump1"></div>
+				<div class="jump2"></div>
+				<div class="jump3"></div>
 			</div>
 			<img class="inline-block h-[2.875rem] w-[2.875rem] rounded-full" src="{% if persona.profile_picture %}{{ persona.profile_picture.url }}{% else %}{% static 'assets/img/avatars/default-robot.png' %}{% endif %}" alt="">
 
@@ -193,4 +195,5 @@
     });
 </script>
 
+	
 {% endblock %}

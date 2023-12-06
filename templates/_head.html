@@ -15,5 +15,48 @@
     {% block css %}
       {% tailwind_css %}
     {% endblock %}
+    <style>
+ 
 
+      .is-typing {
+        height:40px;
+         width: 65px;
+         justify-content: space-around;
+         display: flex;
+      }
+      
+      .jump1,
+      .jump2,
+      .jump3 {
+         width: 8px;
+         height: 8px;
+         border-radius: 100%;
+         background-color: white;
+      }
+
+      .jump1 {
+         animation: typing 1.5s linear infinite;
+         animation-delay: 0.1s;
+      }
+
+      .jump2 {
+         animation: typing 1.5s linear infinite;
+         animation-delay: 0.2s;
+      }
+
+      .jump3 {
+         animation: typing 1.5s linear infinite;
+         animation-delay: 0.3s;
+      }
+
+    @keyframes typing {
+     0% {transform: translateY(0px);}
+     25% {transform: translateY(0px);}
+     35% {transform: translateY(5px);}
+     45% {transform: translateY(0px);}
+     60% {transform: translateY(-5px);}
+     75% {transform: translateY(0px);}
+     100% {transform: translateY(0px);}
+  }
+   </style>
   </head>
