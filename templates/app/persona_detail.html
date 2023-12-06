@@ -46,7 +46,7 @@
 		<div class="relative h-screen">
 
 			<!-- Chat messages -->
-			<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+			<div id="chat-messages" class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
 				
 				<ul class="space-y-5">
 					{% for message in chat_messages %}
@@ -84,14 +84,14 @@
 
 			<!-- Chat box -->
 			<footer class="max-w-4xl mx-auto sticky bottom-0 z-10 bg-white border-t border-gray-200 pt-2 pb-4 sm:pt-4 sm:pb-6 px-4 sm:px-6 lg:px-0 dark:bg-slate-900 dark:border-gray-700">
-				<form method=POST>
+				<form id="chat-form" hx-post="{% url 'send_message' persona_hash=persona.unique_hash %}" hx-target="#ai-response" hx-swap="outerHTML">
 					{% csrf_token %}
 					<div class="flex justify-between items-center mb-3">	
 					</div>
 
 					<!-- Input -->
 					<div class="relative">
-						<textarea class="p-4 pb-12 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Ask me anything..." name="user_message">
+						<textarea  id="user-message"  class="p-4 pb-12 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Ask me anything..." name="user_message">
 						</textarea>
 
 						<!-- Toolbar -->
@@ -136,4 +136,61 @@
 		</div>
 	</div>
 </div><!--/Content-->
+<script>
+    function scrollToBottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        scrollToBottom(); // Scroll on page load
+    });
+
+    document.getElementById('chat-form').addEventListener('submit', function(event) {
+        var userMessageInput = document.getElementById('user-message');
+        var userMessageText = userMessageInput.value.trim();
+
+        if (userMessageText === '') {
+            event.preventDefault(); // Prevent empty message submission
+            return;
+        }
+
+
+
+        // Append User Message
+        var userMessageHtml = `
+
+            <li class="flex gap-x-2 sm:gap-x-4 space-y-5">
+                <img class="inline-block h-[2.875rem] w-[2.875rem] rounded-full" src="{% static 'assets/img/avatars/default-user.png' %}">
+                <div class="bg-white border border-gray-200 rounded-lg p-4 space-y-3 dark:bg-slate-900 dark:border-gray-700">
+                    <p class="text-sm">${userMessageText}</p>
+                </div>
+            </li>
+			`;
+			document.getElementById('chat-messages').insertAdjacentHTML('beforeend', userMessageHtml);
+			scrollToBottom();
+
+        // Append AI Loading Bubble
+        var aiLoadingHtml = `
+		<li id="ai-response" class="max-w-2xl ms-auto flex justify-end gap-x-2 sm:gap-x-4 space-y-5">
+			<div class="inline-block bg-blue-600 rounded-lg p-4 shadow-sm">
+				<div class="loader">Loading...</div>
+			</div>
+			<img class="inline-block h-[2.875rem] w-[2.875rem] rounded-full" src="{% if persona.profile_picture %}{{ persona.profile_picture.url }}{% else %}{% static 'assets/img/avatars/default-robot.png' %}{% endif %}" alt="">
+
+		</li>
+			`;
+			document.getElementById('chat-messages').insertAdjacentHTML('beforeend', aiLoadingHtml);
+	
+
+		});
+	
+		document.body.addEventListener('htmx:afterRequest', function(event) {
+			if (event.target.id === 'chat-form') {
+				document.getElementById('user-message').value = ''; // Clear the textarea
+				scrollToBottom();
+			}
+
+    });
+</script>
+
 {% endblock %}

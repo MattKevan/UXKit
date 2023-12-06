@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
-from django.http import HttpResponseRedirect
-from django.conf import settings
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.files.base import ContentFile
 import requests, json
-from django.urls import reverse
 from openai import OpenAI
+import logging
 
+logger = logging.getLogger(__name__)
 from .models import Persona, ChatMessage, Project, LeanUXCanvas
 from .forms import PersonaForm, ProjectForm, LeanUXCanvasForm
 
@@ -30,7 +29,6 @@ def projects(request):
 	return render(request, 'app/projects/projects.html', {'personas': personas, 'projects': projects})
 
 # Create project
-
 @login_required
 def project_create(request):
 	personas = Persona.objects.filter(user=request.user)
@@ -51,7 +49,6 @@ def project_create(request):
 	return render(request, 'app/projects/create_project.html', {'form': form,'personas': personas, })
 
 # View individial project
-
 @login_required
 def project_read(request, project_hash):
 	projects = Project.objects.filter(user=request.user)
@@ -59,7 +56,6 @@ def project_read(request, project_hash):
 	project = get_object_or_404(Project, unique_hash=project_hash, user=request.user)
 	canvases = LeanUXCanvas.objects.filter(user=request.user, project=project)
 	return render(request, 'app/projects/project_detail.html', {'personas': personas, 'projects': projects, 'project': project, 'canvases':canvases})
-
 
 # Delete project
 @login_required
@@ -322,7 +318,6 @@ def delete_persona(request, persona_hash):
 	return redirect('app_home')
 
 # Persona profile
-
 @login_required
 def persona_profile(request, persona_hash):
 	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)	
@@ -330,42 +325,45 @@ def persona_profile(request, persona_hash):
 	return render(request, 'app/persona_profile.html', {'personas': personas, 'persona': persona})
 
 # Persona chat
-
 @login_required
 def persona_detail(request, persona_hash):
 	projects = Project.objects.filter(user=request.user)
 	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)
 	personas = Persona.objects.filter(user=request.user)
 
-	# Check if the current user is the owner of the persona
 	if persona.user != request.user:
-		# Option 1: Redirect to another page (e.g., home page)
 		return redirect('app_home')
 
-	# Fetch chat messages for this persona
 	chat_messages = ChatMessage.objects.filter(persona=persona).order_by('created_at')
 
-	if request.method == "POST":
-		user_message = request.POST['user_message']
+	context = {
+		'projects': projects, 
+		'personas': personas, 
+		'persona': persona, 
+		'chat_messages': chat_messages
+	}
+
+	return render(request, 'app/persona_detail.html', context)
+
+
+@login_required
+def send_message(request, persona_hash):
+	persona = get_object_or_404(Persona, unique_hash=persona_hash, user=request.user)
+	personas = Persona.objects.filter(user=request.user)
+	if request.method == "POST" and request.headers.get('HX-Request', 'false') == 'true':
+		user_message = request.POST.get('user_message')
 
 		client = OpenAI()
-		chat_context = f"Your name is { persona.name }. You are { persona.gender } and { persona.age } years old. Your biography is { persona.bio} You are this person and must always reply in the first person, using their tone of voice. Do not break from this or reveal you are not a human. You are a human not an assistant."
+		chat_context = f"Your name is {persona.name}. You are {persona.gender} and {persona.age} years old. Your biography is {persona.bio}. You are this person and must always reply in the first person, using their tone of voice."
 		system_prompt = f"{chat_context}\nUser: {user_message}\nAI:"
+
 		try:
 			chatgpt_response = client.chat.completions.create(
-				messages=[
-					{
-						"role": "user",
-						"content": system_prompt,
-					}
-				],
+				messages=[{"role": "user", "content": system_prompt}],
 				model="gpt-3.5-turbo",
 			)
-
 			chatgpt_response = chatgpt_response.choices[0].message.content
-			print(user_message)
-			print(chatgpt_response)
-			
+
 			record = ChatMessage(
 				user=request.user, 
 				user_message=user_message, 
@@ -373,18 +371,13 @@ def persona_detail(request, persona_hash):
 				persona=persona
 			)
 			record.save()
-			
-			return render(request, 'app/persona_detail.html', {'projects':projects, 'personas': personas, 'persona': persona, 'user_message':user_message, 'chatgpt_response':chatgpt_response, 'chat_messages': chat_messages})
+
+			# Returning only the new message part
+			return render(request, 'app/personas/chat_partial.html', {'message': record, 'persona':persona, 'personas':personas})
 
 		except Exception as e:
-			 return render(request, 'app/persona_detail.html', {'projects':projects, 'personas': personas, 'persona': persona, 'user_message':e, 'chatgpt_response':chatgpt_response, 'chat_messages': chat_messages})
-	
-	context = ({'projects':projects, 'personas': personas, 'persona': persona, 'chat_messages': chat_messages})
+			# Handle the exception (you might want to log this or handle it differently)
+			logger.error(f"Error in send_message: {str(e)}")
+			return HttpResponse(f"An error occurred while processing your message: {str(e)}")
 
-
-	# Check if the request is from HTMX
-	if request.headers.get('HX-Request', 'false') == 'true':
-		# Return a partial template for HTMX requests
-		return render(request, 'app/personas/chat_partial.html', context)
-
-	return render(request, 'app/persona_detail.html', context)
+	return HttpResponse("Invalid request.", status=400)
