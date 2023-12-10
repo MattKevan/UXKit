@@ -21,34 +21,23 @@ class LeanUXCanvas(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	unique_hash = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 	project = models.ForeignKey(Project, on_delete=models.CASCADE)
-	name = models.CharField(max_length=100)
+	name = models.CharField(max_length=200)
 
-	problem = models.CharField(max_length=500)
-
-	# Business Outcomes
-	primary_outcome = models.CharField(max_length=255)
-	secondary_outcomes = models.TextField()  # This could be a list, so you might want to serialize it when saving
-	# Users and Customers
-	primary_users = models.TextField()  # This could also be a list
-	secondary_users = models.TextField()  # This could also be a list
-	# User Outcomes
-	user_outcomes = models.TextField()  # Another list
-	# User Problems
-	user_problems = models.TextField()  # Another list
-	# Solutions
-	solution_ideas = models.TextField()  # And another list
+	lean_problem = models.CharField(max_length=500)
+	# Business outcomes
+	lean_outcomes = models.TextField()
+	# Users and customers
+	lean_users = models.TextField()
+	# User outcomes
+	lean_user_outcomes = models.TextField()
+	# User solutions
+	lean_solutions = models.TextField()
 	# Hypotheses
-	hypotheses = models.TextField()
+	lean_hypotheses = models.TextField()
 	# Assumptions
-	assumptions = models.TextField()
+	lean_assumptions = models.TextField()
 	# Experiment
-	experiment_what_to_test = models.TextField()
-	experiment_method = models.TextField()
-	experiment_success_metrics = models.TextField()  # List
-	# Minimum Viable Product (MVP)
-	mvp_actions = models.TextField()  # List
-	# Learning and Metrics
-	learning_metrics_tracking = models.TextField()
+	lean_experiments = models.TextField()
 
 	def __str__(self):
 		return self.name

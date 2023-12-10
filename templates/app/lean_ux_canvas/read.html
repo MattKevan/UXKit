@@ -18,39 +18,33 @@
 
           <div class="border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
             <h3 class="font-bold leading-6">1. Business problem</h3>
-            <p class="">{{ lean_ux_canvas.problem }}</p>
+            <p class="">{{ lean_ux_canvas.lean_problem }}</p>
           </div>
 
           <div class="border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
             <h3>2. Business outcomes</h3>
             <h4>Primary outcomes</h4>
-            <p class="mt-1 leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ lean_ux_canvas.primary_outcome }}</p>
-            <h4>Secondary outcomes</h4>
-            <ul class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> <ul>
-              {% for outcome in lean_ux_canvas.secondary_outcomes %}
-                <li>{{ outcome }}</li>
-              {% endfor %}
-            </ul>
+            <p class="mt-1 leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ lean_ux_canvas.lean_outcomes }}</p>
+            
           </div>
           <div class="border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
             <h3>3. Users</h3>
-            <h4 class="font-medium leading-6 text-gray-900">Primary users</h4>
-                <p class="mt-1leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ lean_ux_canvas.primary_users }}</p>
-                <h4 class="font-medium leading-6 text-gray-900">Secondary users</h4>
-                <p class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ lean_ux_canvas.secondary_users }}</p>
+            <h4 class="font-medium leading-6 text-gray-900">Users</h4>
+                <p class="mt-1leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ lean_ux_canvas.lean_users }}</p>
+                
           </div>
           <div class="border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
             <h3>4. User outcomes and benefits</h3>
                 <ul class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">    
-                    {% for problem in lean_ux_canvas.user_problems %}
-                    <li>{{ problem }}</li>
+                    {% for outcome in lean_ux_canvas.lean_outcomes %}
+                    <li>{{ outcome }}</li>
                     {% endfor %}
                 </ul>
           </div>
           <div class="border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
             <h3 class="font-medium leading-6 text-gray-900">5. Solutions</h3>
             <ul>
-              {% for idea in lean_ux_canvas.solution_ideas %}
+              {% for idea in lean_ux_canvas.lean_solutions %}
               <li>{{ idea }}</li>
               {% endfor %}
             </ul>
@@ -61,30 +55,18 @@
           <div class="border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
             <h3 class="font-medium leading-6 text-gray-900">6. Hypotheses</h3>
                 <ul class="mt-1 leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  {% for idea in lean_ux_canvas.hypotheses %}
+                  {% for idea in lean_ux_canvas.lean_hypotheses %}
                   <li>{{ idea }}</li>
                   {% endfor %}
               </ul>
           </div>
           <div class="border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
             <h3 class="font-medium leading-6 text-gray-900">7. What's the most important thing to learn first?</h3>
-            <p>What to Test: {{ lean_ux_canvas.experiment_what_to_test }}</p>
-            <p>Method: {{ lean_ux_canvas.experiment_method }}</p>
+            <p>Method: {{ lean_ux_canvas.lean_experiments }}</p>
           </div>
           <div class="border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
             <h3 class="font-medium leading-6 text-gray-900"3>8. What's the least amount of work?</h3>
-            <h2>Success Metrics</h2>
-          <ul>
-              {% for metric in lean_ux_canvas.experiment_success_metrics %}
-              <li>{{ metric }}</li>
-              {% endfor %}
-          </ul>
-          <h3>MVP Actions</h3>
-          <ul>
-              {% for action in lean_ux_canvas.mvp_actions %}
-              <li>{{ action }}</li>
-              {% endfor %}
-          </ul>
+           
       
           <h3>Learning and Metrics Tracking</h3>
           <ul>

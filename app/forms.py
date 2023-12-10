@@ -24,7 +24,7 @@ class ProjectForm(forms.ModelForm):
 class LeanUXCanvasForm(forms.ModelForm):
 	class Meta:
 		model = LeanUXCanvas
-		fields = ['name', 'problem']
+		fields = ['name', 'lean_problem']
 		widgets = {
 			'problem': forms.Textarea(attrs={'rows': 3}),
 		}
