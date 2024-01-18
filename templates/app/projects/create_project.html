@@ -1,0 +1,21 @@
+{% extends '_app_base.html' %}
+{% block title %}Create project{% endblock title %}
+    {% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="w-full pt-10 sm:px-6 md:px-8 lg:ps-72">
+
+<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-0 mx-auto">
+    <div class="pt-1.5 py-8">
+        <h1 class="text-2xl font-bold text-gray-900">Create project</h1>
+    </div>
+
+    <form method="post"  class="pb-10">
+        {% csrf_token %}
+         {{ form|crispy }}
+        <button class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" type="submit">Create project</button>
+    </form>
+</div>
+</div>
+{% endblock %}

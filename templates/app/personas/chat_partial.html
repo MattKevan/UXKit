@@ -1,0 +1,15 @@
+{% load static %}
+<!-- User chat bubble -->
+
+
+<!-- AI chat bubble -->
+<li class="max-w-2xl ms-auto flex justify-end gap-x-2 sm:gap-x-4 mt-5">
+  <div class="grow text-end space-y-3">
+      <div class="inline-block bg-blue-600 rounded-lg p-4 shadow-sm">
+          <p class="text-sm text-white">
+              {{ message.chatgpt_response }}
+          </p>
+      </div>
+  </div>
+  <img class="inline-block h-[2.875rem] w-[2.875rem] rounded-full" src="{% if persona.profile_picture %}{{ persona.profile_picture.url }}{% else %}{% static 'assets/img/avatars/default-robot.png' %}{% endif %}" alt="">
+</li>

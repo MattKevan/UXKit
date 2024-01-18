@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 # Initialise environment variables
 load_dotenv()
 
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -17,7 +18,7 @@ DEBUG = os.environ.get('DEBUG')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1","potential-robot-q7pr45p747f5vx-8000.app.github.dev/"]
 
 # Media
 
@@ -47,10 +48,10 @@ INSTALLED_APPS = [
     "accounts",
     "pages",
     "app",
-
-
 ]
+
 TAILWIND_APP_NAME = 'theme'
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -64,7 +65,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",  # django-allauth
     "django_browser_reload.middleware.BrowserReloadMiddleware",
-
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf

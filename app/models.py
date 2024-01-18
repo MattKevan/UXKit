@@ -2,6 +2,48 @@ from django.db import models
 from django.conf import settings
 import uuid
 
+# Project model
+
+class Project(models.Model):
+	# Project fields
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	name = models.CharField(max_length=100)
+	description = models.CharField(max_length=400)
+	unique_hash = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+	def __str__(self):
+		return self.name
+
+# UX canvas model
+
+class LeanUXCanvas(models.Model):
+	# Project fields
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	unique_hash = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+	project = models.ForeignKey(Project, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200)
+
+	lean_problem = models.CharField(max_length=500)
+	# Business outcomes
+	lean_outcomes = models.TextField()
+	# Users and customers
+	lean_users = models.TextField()
+	# User outcomes
+	lean_user_outcomes = models.TextField()
+	# User solutions
+	lean_solutions = models.TextField()
+	# Hypotheses
+	lean_hypotheses = models.TextField()
+	# Assumptions
+	lean_assumptions = models.TextField()
+	# Experiment
+	lean_experiments = models.TextField()
+
+	def __str__(self):
+		return self.name
+
+# Persona model
+
 class Persona(models.Model):
 	# Gender choices
 	MAN = 'Male'
