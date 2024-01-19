@@ -46,7 +46,7 @@
             
      
     <!-- Add more fields as needed -->
-    <a href="{% url 'lean_ux_canvas_edit' lean_ux_canvas.unique_hash %}">Edit Canvas</a>
+    <a class="inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" href="{% url 'lean_ux_canvas_edit' lean_ux_canvas.unique_hash %}">Edit canvas</a>
 
            <form action="{% url 'lean_ux_canvas_delete' lean_ux_canvas.unique_hash %}" method="post" class="py-6 ">
         {% csrf_token %}

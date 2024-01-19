@@ -1,14 +1,14 @@
 
 <div class="grid grid-cols-6 gap-4 lg:gap-6 mt-6">
 
-  <div class="col-span-2 border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
+  <div class="col-span-2 border shadow-sm rounded dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
     <h3 class="font-bold leading-6 mb-2">1. Business problem</h3>
     <ul class="pl-5 list-disc leading-6 text-gray-700">
       <li>{{ lean_ux_canvas.lean_problem }}</li>
     </ul>
   </div>
 
-  <div class="col-span-2 border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
+  <div class="col-span-2 border shadow-sm rounded dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
     <h3 class="font-bold leading-6 mb-2">2. Business outcomes</h3>
     <ul class="pl-5 list-disc leading-6 text-gray-700">    
       {% for outcome in lean_ux_canvas.lean_outcomes %}
@@ -18,7 +18,7 @@
 
   </div>
 
-  <div class="col-span-2 border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
+  <div class="col-span-2 border shadow-sm rounded dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
     <h3 class="font-bold leading-6 mb-2">3. Users</h3>
         <ul class="pl-5 list-disc leading-6 text-gray-700">
           {% for user in lean_ux_canvas.lean_users %}
@@ -28,7 +28,7 @@
 
   </div>
 
-  <div class="col-span-2 border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
+  <div class="col-span-2 border shadow-sm rounded dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
     <h3 class="font-bold leading-6 mb-2">4. User outcomes and benefits</h3>
     <ul class="pl-5 list-disc leading-6 text-gray-700">    
         {% for user_outcome in lean_ux_canvas.lean_user_outcomes %}
@@ -37,7 +37,7 @@
     </ul>
   </div>
 
-  <div class="col-span-2 border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
+  <div class="col-span-2 border shadow-sm rounded dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
     <h3 class="font-bold leading-6 mb-2">5. Solutions</h3>
     <ul class="pl-5 list-disc leading-6 text-gray-700">
       {% for solution in lean_ux_canvas.lean_solutions %}
@@ -46,7 +46,7 @@
     </ul>
   </div>
 
-  <div class="col-span-2 border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
+  <div class="col-span-2 border shadow-sm rounded dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
     <h3 class="font-bold leading-6  mb-2 text-gray-900">6. Hypotheses</h3>
         <ul class="pl-5 list-disc leading-6 text-gray-700">
           {% for hypothesis in lean_ux_canvas.lean_hypotheses %}
@@ -55,7 +55,7 @@
       </ul>
   </div>
 
-  <div class="col-span-3 border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
+  <div class="col-span-3 border shadow-sm rounded dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
     <h3 class="font-bold leading-6 text-gray-900 mb-2">7. What's the most important thing we need to learn first?</h3>
     <ul class="pl-5 list-disc leading-6 text-gray-700">
       {% for assumption in lean_ux_canvas.lean_assumptions %}
@@ -64,7 +64,7 @@
   </ul>
   </div>
 
-  <div class="col-span-3 border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
+  <div class="col-span-3 border shadow-sm rounded dark:bg-slate-900 dark:border-gray-800 p-4 md:p-5">
     <h3 class="font-bold leading-6 text-gray-900 mb-2"3>8. What's the least amount of work we need to do to learn the next most important thing?</h3>
     <ul class="pl-5 list-disc leading-6 text-gray-700">
       {% for experiment in lean_ux_canvas.lean_experiments %}

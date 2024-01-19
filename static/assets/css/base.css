@@ -1,9 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer components {
-    /* Progress bar */
+/* Progress bar */
 
 .progress {
     position: fixed;
@@ -107,4 +102,3 @@
       right: -8%;
     }
   }
-}
