@@ -26,5 +26,10 @@ class LeanUXCanvasForm(forms.ModelForm):
 		model = LeanUXCanvas
 		fields = ['name', 'lean_problem']
 		widgets = {
-			'problem': forms.Textarea(attrs={'rows': 3}),
+			'lean_problem': forms.Textarea(attrs={'rows': 3}),
 		}
+
+class LeanUXCanvasEditForm(forms.ModelForm):
+    class Meta:
+        model = LeanUXCanvas
+        fields = ['name', 'lean_problem', 'lean_outcomes', 'lean_users', 'lean_user_outcomes', 'lean_solutions', 'lean_hypotheses', 'lean_assumptions', 'lean_experiments']

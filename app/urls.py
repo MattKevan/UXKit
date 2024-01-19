@@ -16,6 +16,7 @@ urlpatterns = [
     # Lean UX canvases
     path('<uuid:project_hash>/ux-canvas/create/', views.lean_ux_canvas_create, name='lean_ux_canvas_create'),
     path('ux-canvas/<uuid:lean_ux_canvas_hash>/', views.lean_ux_canvas_read, name='lean_ux_canvas_read'),
+    path('ux-canvas/<uuid:lean_ux_canvas_hash>/edit/', views.lean_ux_canvas_edit, name='lean_ux_canvas_edit'),
     path('ux-canvas/<uuid:lean_ux_canvas_hash>/delete/', views.lean_ux_canvas_delete, name='lean_ux_canvas_delete'),
     
     # Personas 

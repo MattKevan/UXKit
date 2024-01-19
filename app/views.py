@@ -8,7 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 from .models import Persona, ChatMessage, Project, LeanUXCanvas
-from .forms import PersonaForm, ProjectForm, LeanUXCanvasForm
+from .forms import PersonaForm, ProjectForm, LeanUXCanvasForm, LeanUXCanvasEditForm
 
 # App home
 
@@ -78,76 +78,77 @@ from openai import OpenAI
 
 @login_required
 def lean_ux_canvas_create(request, project_hash):
-    project = get_object_or_404(Project, unique_hash=project_hash, user=request.user)
-    
-    if request.method == 'POST':
-        form = LeanUXCanvasForm(request.POST)
-        if form.is_valid():
-            lean_problem = form.cleaned_data['lean_problem']
-            name = form.cleaned_data['name']
+	project = get_object_or_404(Project, unique_hash=project_hash, user=request.user)
+	personas = Persona.objects.filter(user=request.user)
+	
+	if request.method == 'POST':
+		form = LeanUXCanvasForm(request.POST)
+		if form.is_valid():
+			lean_problem = form.cleaned_data['lean_problem']
+			name = form.cleaned_data['name']
 
-            prompt = (
-                f"Create a Lean UX Canvas in JSON format based on this business problem: '{lean_problem}'.\n"
-                "The response should be structured as follows and include a list of items for each section:\n"
-                "{\n"
-                "   'BusinessOutcomes': [],\n"
-                "   'Users': [],\n"
-                "   'UserOutcomes': [],\n"
-                "   'Solutions': [],\n"
-                "   'Hypotheses': [],\n"
-                "   'Assumptions': [],\n"
-                "   'Experiments': []\n"
-                "}"
-            )
+			prompt = (
+				f"Create a Lean UX Canvas in JSON format based on this business problem: '{lean_problem}'.\n"
+				"The response should be structured in JSON as follows and include a list of at least four items for each section:\n"
+				"{\n"
+				"   'BusinessOutcomes': [],\n"
+				"   'Users': [],\n"
+				"   'UserOutcomes': [],\n"
+				"   'Solutions': [],\n"
+				"   'Hypotheses': [],\n"
+				"   'Assumptions': [],\n"
+				"   'Experiments': []\n"
+				"}"
+			)
 
-            try:
-                client = OpenAI()  # Ensure API keys and other parameters are set correctly
-                chatgpt_response = client.chat.completions.create(
-                    messages=[
-                        {"role": "user", "content": prompt},
-                    ],
-                    model="gpt-3.5-turbo",
-                )
+			try:
+				client = OpenAI()  # Ensure API keys and other parameters are set correctly
+				chatgpt_response = client.chat.completions.create(
+					messages=[
+						{"role": "user", "content": prompt},
+					],
+					model="gpt-3.5-turbo",
+				)
 
-                # Verify and parse the response
-                response_content = chatgpt_response.choices[0].message.content
-                if response_content:
-                    data = json.loads(response_content)
+				# Verify and parse the response
+				response_content = chatgpt_response.choices[0].message.content
+				if response_content:
+					data = json.loads(response_content)
 
-                    # Process each list into a formatted string
-                    def list_to_string(lst):
-                        return '\n'.join(lst) if isinstance(lst, list) else ''
+					# Process each list into a formatted string
+					def list_to_string(lst):
+						return '\n'.join(lst) if isinstance(lst, list) else ''
 
-                    # Creating a new LeanUXCanvas instance
-                    lean_ux_canvas = LeanUXCanvas(
-                        user=request.user,
-                        project=project,
-                        name=name,
-                        lean_problem=lean_problem,
-                        lean_outcomes=list_to_string(data.get("BusinessOutcomes", [])),
-                        lean_users=list_to_string(data.get("Users", [])),
-                        lean_user_outcomes=list_to_string(data.get("UserOutcomes", [])),
-                        lean_solutions=list_to_string(data.get("Solutions", [])),
-                        lean_hypotheses=list_to_string(data.get("Hypotheses", [])),
-                        lean_assumptions=list_to_string(data.get("Assumptions", [])),
-                        lean_experiments=list_to_string(data.get("Experiments", []))
-                    )
-                    lean_ux_canvas.save()
+					# Creating a new LeanUXCanvas instance
+					lean_ux_canvas = LeanUXCanvas(
+						user=request.user,
+						project=project,
+						name=name,
+						lean_problem=lean_problem,
+						lean_outcomes=list_to_string(data.get("BusinessOutcomes", [])),
+						lean_users=list_to_string(data.get("Users", [])),
+						lean_user_outcomes=list_to_string(data.get("UserOutcomes", [])),
+						lean_solutions=list_to_string(data.get("Solutions", [])),
+						lean_hypotheses=list_to_string(data.get("Hypotheses", [])),
+						lean_assumptions=list_to_string(data.get("Assumptions", [])),
+						lean_experiments=list_to_string(data.get("Experiments", []))
+					)
+					lean_ux_canvas.save()
 
-                    return redirect('lean_ux_canvas_read', lean_ux_canvas_hash=lean_ux_canvas.unique_hash)
-                else:
-                    raise ValueError("Empty response from OpenAI")
+					return redirect('lean_ux_canvas_read', lean_ux_canvas_hash=lean_ux_canvas.unique_hash)
+				else:
+					raise ValueError("Empty response from OpenAI")
 
-            except Exception as e:
-                print(f"Error: {e}")
-                return render(request, 'app/projects/project_detail.html', {'project': project, 'error': str(e)})
-        else:
-            return render(request, 'app/lean_ux_canvas/lean_ux_canvas_create.html', {'form': form, 'project': project})
+			except Exception as e:
+				print(f"Error: {e}")
+				return render(request, 'app/projects/project_detail.html', {'project': project, 'error': str(e)})
+		else:
+			return render(request, 'app/lean_ux_canvas/lean_ux_canvas_create.html', {'form': form, 'project': project, 'personas': personas, })
 
-    else:
-        form = LeanUXCanvasForm()
-    
-    return render(request, 'app/lean_ux_canvas/lean_ux_canvas_create.html', {'form': form, 'project': project})
+	else:
+		form = LeanUXCanvasForm()
+	
+	return render(request, 'app/lean_ux_canvas/lean_ux_canvas_create.html', {'form': form, 'project': project, 'personas': personas, })
 
 # Lean ux canvas read
 
@@ -157,25 +158,41 @@ def lean_ux_canvas_read(request, lean_ux_canvas_hash):
 	personas = Persona.objects.filter(user=request.user)
 	lean_ux_canvas = get_object_or_404(LeanUXCanvas, unique_hash=lean_ux_canvas_hash, user=request.user)
 
-	# Deserialize JSON fields
-	lean_ux_canvas.lean_outcomes = json.loads(lean_ux_canvas.lean_outcomes)
-	lean_ux_canvas.lean_users = json.loads(lean_ux_canvas.lean_users)
-	lean_ux_canvas.lean_solutions = json.loads(lean_ux_canvas.lean_solutions)
-	lean_ux_canvas.lean_hypotheses = json.loads(lean_ux_canvas.lean_hypotheses)
-	lean_ux_canvas.lean_assumptions = json.loads(lean_ux_canvas.lean_assumptions)
-	lean_ux_canvas.lean_experiments = json.loads(lean_ux_canvas.lean_experiments)
-	
+	project = lean_ux_canvas.project
 
-	context = {'personas':personas, 'projects':projects, 'lean_ux_canvas': lean_ux_canvas}
+	# Convert the text fields back to lists for display
+	lean_ux_canvas.lean_outcomes = lean_ux_canvas.lean_outcomes.split('\n') if lean_ux_canvas.lean_outcomes else []
+	lean_ux_canvas.lean_users = lean_ux_canvas.lean_users.split('\n') if lean_ux_canvas.lean_users else []
+	lean_ux_canvas.lean_user_outcomes = lean_ux_canvas.lean_user_outcomes.split('\n') if lean_ux_canvas.lean_user_outcomes else []
+	lean_ux_canvas.lean_solutions = lean_ux_canvas.lean_solutions.split('\n') if lean_ux_canvas.lean_solutions else []
+	lean_ux_canvas.lean_hypotheses = lean_ux_canvas.lean_hypotheses.split('\n') if lean_ux_canvas.lean_hypotheses else []
+	lean_ux_canvas.lean_assumptions = lean_ux_canvas.lean_assumptions.split('\n') if lean_ux_canvas.lean_assumptions else []
+	lean_ux_canvas.lean_experiments = lean_ux_canvas.lean_experiments.split('\n') if lean_ux_canvas.lean_experiments else []
 
-	# Check if the request is from HTMX
-	#if request.headers.get('HX-Request', 'false') == 'true':
-		# Return a partial template for HTMX requests
-		#return render(request, 'app/lean_ux_canvas/partials/read.html', context)
-
-
+	context = {
+		'personas': personas, 
+		'projects': projects, 
+		'lean_ux_canvas': lean_ux_canvas,
+		'project': project  # Add the project to the context
+		}
+	 
 	return render(request, 'app/lean_ux_canvas/read.html', context)
 
+# Lean ux canvas edit 
+@login_required
+def lean_ux_canvas_edit(request, lean_ux_canvas_hash):
+	lean_ux_canvas = get_object_or_404(LeanUXCanvas, unique_hash=lean_ux_canvas_hash, user=request.user)
+	personas = Persona.objects.filter(user=request.user)
+
+	if request.method == 'POST':
+		form = LeanUXCanvasEditForm(request.POST, instance=lean_ux_canvas)
+		if form.is_valid():
+			form.save()
+			return redirect('lean_ux_canvas_read', lean_ux_canvas_hash=lean_ux_canvas.unique_hash)
+	else:
+		form = LeanUXCanvasEditForm(instance=lean_ux_canvas)
+
+	return render(request, 'app/lean_ux_canvas/lean_ux_canvas_edit.html', {'form': form, 'lean_ux_canvas': lean_ux_canvas, 'personas': personas, })
 # Lean ux canvas delete
 
 @login_required
